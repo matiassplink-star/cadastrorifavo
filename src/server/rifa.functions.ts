@@ -63,7 +63,7 @@ export const cadastrarParticipante = createServerFn({ method: "POST" })
       } catch {
         return { ok: false, erro: "Resposta inválida do servidor" };
       }
-      return { ok: !!json.ok, erro: json.erro };
+      return { ok: !!json.ok, erro: json.erro ? traduzirErro(json.erro) : undefined };
     } catch (err) {
       console.error("cadastrarParticipante error", err);
       return { ok: false, erro: String(err) };
