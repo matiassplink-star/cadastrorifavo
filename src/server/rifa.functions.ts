@@ -12,6 +12,21 @@ export type Participante = {
   dataCadastro?: string;
 };
 
+function traduzirErro(msg: string): string {
+  const m = msg.toLowerCase();
+  if (m.includes("permission") || m.includes("not have access"))
+    return "Sem permissão para gravar na planilha. Reimplante o Apps Script (Executar como: Eu / Acesso: Qualquer pessoa) e autorize novamente.";
+  if (m.includes("already") || m.includes("duplicate") || m.includes("ocupado"))
+    return "Número(s) já reservado(s) por outra pessoa. Atualize a página.";
+  if (m.includes("quota") || m.includes("rate"))
+    return "Limite do Google atingido. Tente novamente em alguns minutos.";
+  if (m.includes("timeout") || m.includes("timed out"))
+    return "Tempo esgotado ao salvar. Tente novamente.";
+  if (m.includes("not found"))
+    return "Planilha não encontrada. Verifique a configuração do Apps Script.";
+  return msg;
+}
+
 export const listarParticipantes = createServerFn({ method: "GET" }).handler(
   async () => {
     try {
@@ -63,7 +78,7 @@ export const cadastrarParticipante = createServerFn({ method: "POST" })
       } catch {
         return { ok: false, erro: "Resposta inválida do servidor" };
       }
-      return { ok: !!json.ok, erro: json.erro };
+      return { ok: !!json.ok, erro: json.erro ? traduzirErro(json.erro) : undefined };
     } catch (err) {
       console.error("cadastrarParticipante error", err);
       return { ok: false, erro: String(err) };
