@@ -43,12 +43,19 @@ export const cadastrarParticipante = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => cadastroSchema.parse(input))
   .handler(async ({ data }) => {
     try {
-      const res = await fetch(WEBHOOK_URL, {
+      let res = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-        redirect: "follow",
+        redirect: "manual",
       });
+      // Apps Script redirects POST to script.googleusercontent.com which only accepts GET.
+      // Follow up to 5 redirects manually using GET.
+      for (let i = 0; i < 5 && (res.status === 301 || res.status === 302 || res.status === 303 || res.status === 307); i++) {
+        const loc = res.headers.get("location");
+        if (!loc) break;
+        res = await fetch(loc, { method: "GET", redirect: "manual" });
+      }
       const text = await res.text();
       let json: { ok?: boolean; erro?: string } = {};
       try {
