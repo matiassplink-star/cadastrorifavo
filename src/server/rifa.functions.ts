@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 const WEBHOOK_URL =
-  "https://script.google.com/macros/s/AKfycby_YyidhG0bA_ixbozEYRlwkPvKgW0W2MhYSFnfAK2kH1_Tkg0mfM27Rgj7EiJDY7-T/exec";
+  "https://script.google.com/macros/s/AKfycbyvnmC6aTVV_uHTQBt6JOiEpscds4BZklcncbet9j13-V4o6WGDMcwEd-M6POFcaHyFdg/exec";
 
 export type Participante = {
   nome: string;
