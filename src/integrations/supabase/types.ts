@@ -14,7 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      participantes: {
+        Row: {
+          data_cadastro: string
+          id: string
+          nome: string
+          numeros_array: number[]
+          numeros_rifa: string
+          telefone: string
+          valor_doado: number
+        }
+        Insert: {
+          data_cadastro?: string
+          id?: string
+          nome: string
+          numeros_array: number[]
+          numeros_rifa: string
+          telefone: string
+          valor_doado: number
+        }
+        Update: {
+          data_cadastro?: string
+          id?: string
+          nome?: string
+          numeros_array?: number[]
+          numeros_rifa?: string
+          telefone?: string
+          valor_doado?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
