@@ -1,8 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-
-const WEBHOOK_URL =
-  "https://script.google.com/macros/s/AKfycbyvnmC6aTVV_uHTQBt6JOiEpscds4BZklcncbet9j13-V4o6WGDMcwEd-M6POFcaHyFdg/exec";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 export type Participante = {
   nome: string;
@@ -12,38 +10,27 @@ export type Participante = {
   dataCadastro?: string;
 };
 
-function traduzirErro(msg: string): string {
-  const m = msg.toLowerCase();
-  if (m.includes("permission") || m.includes("not have access"))
-    return "Sem permissão para gravar na planilha. Reimplante o Apps Script (Executar como: Eu / Acesso: Qualquer pessoa) e autorize novamente.";
-  if (m.includes("already") || m.includes("duplicate") || m.includes("ocupado"))
-    return "Número(s) já reservado(s) por outra pessoa. Atualize a página.";
-  if (m.includes("quota") || m.includes("rate"))
-    return "Limite do Google atingido. Tente novamente em alguns minutos.";
-  if (m.includes("timeout") || m.includes("timed out"))
-    return "Tempo esgotado ao salvar. Tente novamente.";
-  if (m.includes("not found"))
-    return "Planilha não encontrada. Verifique a configuração do Apps Script.";
-  return msg;
-}
-
 export const listarParticipantes = createServerFn({ method: "GET" }).handler(
   async () => {
-    try {
-      const res = await fetch(WEBHOOK_URL, { method: "GET" });
-      if (!res.ok) {
-        return { ok: false, participantes: [] as Participante[], erro: `HTTP ${res.status}` };
-      }
-      const data = (await res.json()) as { ok: boolean; participantes?: Participante[]; erro?: string };
-      return {
-        ok: !!data.ok,
-        participantes: data.participantes ?? [],
-        erro: data.erro,
-      };
-    } catch (err) {
-      console.error("listarParticipantes error", err);
-      return { ok: false, participantes: [] as Participante[], erro: String(err) };
+    const { data, error } = await supabaseAdmin
+      .from("participantes")
+      .select("nome, telefone, valor_doado, numeros_rifa, data_cadastro")
+      .order("data_cadastro", { ascending: true });
+
+    if (error) {
+      console.error("listarParticipantes error", error);
+      return { ok: false, participantes: [] as Participante[], erro: error.message };
     }
+
+    const participantes: Participante[] = (data ?? []).map((r) => ({
+      nome: r.nome,
+      telefone: r.telefone,
+      valorDoado: Number(r.valor_doado),
+      numerosRifa: r.numeros_rifa,
+      dataCadastro: r.data_cadastro ?? undefined,
+    }));
+
+    return { ok: true, participantes };
   },
 );
 
@@ -51,36 +38,42 @@ const cadastroSchema = z.object({
   nome: z.string().trim().min(2).max(120),
   telefone: z.string().trim().min(8).max(40),
   valorDoado: z.number().positive().max(1_000_000),
-  numerosRifa: z.string().trim().min(1).max(500),
+  numerosRifa: z.string().trim().min(1).max(2000),
 });
 
 export const cadastrarParticipante = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => cadastroSchema.parse(input))
   .handler(async ({ data }) => {
-    try {
-      let res = await fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-        redirect: "manual",
-      });
-      // Apps Script redirects POST to script.googleusercontent.com which only accepts GET.
-      // Follow up to 5 redirects manually using GET.
-      for (let i = 0; i < 5 && (res.status === 301 || res.status === 302 || res.status === 303 || res.status === 307); i++) {
-        const loc = res.headers.get("location");
-        if (!loc) break;
-        res = await fetch(loc, { method: "GET", redirect: "manual" });
-      }
-      const text = await res.text();
-      let json: { ok?: boolean; erro?: string } = {};
-      try {
-        json = JSON.parse(text);
-      } catch {
-        return { ok: false, erro: "Resposta inválida do servidor" };
-      }
-      return { ok: !!json.ok, erro: json.erro ? traduzirErro(json.erro) : undefined };
-    } catch (err) {
-      console.error("cadastrarParticipante error", err);
-      return { ok: false, erro: String(err) };
+    // Normaliza string "1, 2, 3" em array de inteiros
+    const nums = Array.from(
+      new Set(
+        data.numerosRifa
+          .split(/[,\s]+/)
+          .map((s) => parseInt(s.trim(), 10))
+          .filter((n) => Number.isInteger(n) && n > 0),
+      ),
+    );
+
+    if (nums.length === 0) {
+      return { ok: false, erro: "Informe ao menos um número válido." };
     }
+
+    const { error } = await supabaseAdmin.from("participantes").insert({
+      nome: data.nome,
+      telefone: data.telefone,
+      valor_doado: data.valorDoado,
+      numeros_rifa: nums.join(", "),
+      numeros_array: nums,
+    });
+
+    if (error) {
+      console.error("cadastrarParticipante error", error);
+      const msg = error.message.toLowerCase();
+      if (msg.includes("já estão reservados") || msg.includes("reservados")) {
+        return { ok: false, erro: "Número(s) já reservado(s) por outra pessoa. Atualize a página." };
+      }
+      return { ok: false, erro: error.message };
+    }
+
+    return { ok: true };
   });
