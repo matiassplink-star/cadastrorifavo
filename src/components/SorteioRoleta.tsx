@@ -157,8 +157,13 @@ export function SorteioRoleta({ participantes }: { participantes: Participante[]
 
             {historico.length > 0 && (
               <div className="pt-2 border-t">
-                <div className="text-xs font-semibold text-muted-foreground mb-2">
-                  Histórico desta sessão
+                <div className="flex items-center justify-between mb-2">
+                  <div className="text-xs font-semibold text-muted-foreground">
+                    Histórico desta sessão
+                  </div>
+                  <Button variant="ghost" size="sm" onClick={() => setHistorico([])}>
+                    Limpar histórico
+                  </Button>
                 </div>
                 <div className="space-y-1">
                   {historico.map((v, i) => (
