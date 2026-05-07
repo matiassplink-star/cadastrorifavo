@@ -17,6 +17,7 @@ import {
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { listarParticipantes, type Participante } from "@/server/rifa.functions";
+import { SorteioRoleta } from "@/components/SorteioRoleta";
 
 const ADMIN_PASSWORD = "xvpc7gn8";
 const STORAGE_KEY = "rifa_admin_auth";
@@ -196,6 +197,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           value={`R$ ${stats.total.toFixed(2)}`}
         />
       </div>
+
+      <SorteioRoleta participantes={participantes} />
 
       <Card>
         <CardHeader>
