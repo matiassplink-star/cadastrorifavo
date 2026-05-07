@@ -161,7 +161,15 @@ export function SorteioRoleta({ participantes }: { participantes: Participante[]
                   <div className="text-xs font-semibold text-muted-foreground">
                     Histórico desta sessão
                   </div>
-                  <Button variant="ghost" size="sm" onClick={() => setHistorico([])}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setHistorico([]);
+                      setVencedor(null);
+                      setAtual(null);
+                    }}
+                  >
                     Limpar histórico
                   </Button>
                 </div>
