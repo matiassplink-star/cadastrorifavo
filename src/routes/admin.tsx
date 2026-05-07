@@ -198,6 +198,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         />
       </div>
 
+      <SorteioRoleta participantes={participantes} />
+
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Lista de cadastros</CardTitle>
