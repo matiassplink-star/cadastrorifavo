@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/table";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
-import { listarParticipantes, type Participante } from "@/server/rifa.functions";
+import { listarParticipantes, type Participante } from "@/lib/rifa.functions";
 import { SorteioRoleta } from "@/components/SorteioRoleta";
 
 const ADMIN_PASSWORD = "xvpc7gn8";
