@@ -240,8 +240,8 @@ function RifaPage() {
           <InfoCard
             icon={<Trophy className="h-5 w-5" />}
             label="PREMIAÇÃO"
-            value={formatBRL(PREMIO)}
-            sub="no PIX"
+            value="Kit Tupperware"
+            sub="veja a foto abaixo"
           />
           <InfoCard
             icon={<Calendar className="h-5 w-5" />}
