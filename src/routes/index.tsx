@@ -26,13 +26,14 @@ import {
   listarParticipantes,
   type Participante,
 } from "@/server/rifa.functions";
+import premioAsset from "@/assets/premio-tupperware.jpg.asset.json";
 
 const TOTAL_NUMEROS = 200;
-const VALOR_POR_NUMERO = 10;
-const PREMIO = 150;
-const DATA_SORTEIO = "28/06/2026";
-const CHAVE_PIX = "34992448864";
-const NOME_PIX = "VICTOR DIAS";
+const VALOR_POR_NUMERO = 15;
+const DATA_SORTEIO = "10/07/2026";
+const CHAVE_PIX = "13578182621";
+const NOME_PIX = "LAINE RODRIGUES DE SOUSA";
+const WHATSAPP_CONTATO = "34997703179";
 
 export const Route = createFileRoute("/")({
   component: RifaPage,
@@ -42,13 +43,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Participe da Rifa Solidária da Maria Luci. R$ 10,00 por número, prêmio de R$ 150,00 via PIX. Sorteio em 28/06/2026.",
+          "Rifa Solidária da Maria Luci. R$ 15,00 por número, prêmio Kit Tupperware. Sorteio em 10/07/2026.",
       },
       { property: "og:title", content: "Rifa Solidária — Maria Luci" },
       {
         property: "og:description",
         content:
-          "Ajude Maria Luci no tratamento urgente de visão. R$ 10,00 por número.",
+          "Ajude Maria Luci no tratamento urgente de visão. R$ 15,00 por número — prêmio Kit Tupperware.",
       },
     ],
   }),
@@ -239,8 +240,8 @@ function RifaPage() {
           <InfoCard
             icon={<Trophy className="h-5 w-5" />}
             label="PREMIAÇÃO"
-            value={formatBRL(PREMIO)}
-            sub="no PIX"
+            value="Kit Tupperware"
+            sub="veja a foto abaixo"
           />
           <InfoCard
             icon={<Calendar className="h-5 w-5" />}
@@ -277,6 +278,54 @@ function RifaPage() {
                 </>
               )}
             </Button>
+          </CardContent>
+        </Card>
+
+        {/* Prêmio - Foto */}
+        <Card style={{ boxShadow: "var(--shadow-card)" }}>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Trophy className="h-5 w-5 text-primary" />
+              Prêmio: Kit Tupperware
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <img
+              src={premioAsset.url}
+              alt="Kit Tupperware - prêmio da Rifa Solidária da Maria Luci"
+              className="mx-auto w-full max-w-2xl rounded-lg border border-border"
+              loading="lazy"
+            />
+            <p className="mt-3 text-center text-sm text-muted-foreground">
+              Concorra a este lindo kit Tupperware! 💜
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* WhatsApp contato */}
+        <Card style={{ boxShadow: "var(--shadow-card)" }}>
+          <CardContent className="flex flex-col items-center gap-3 p-5 text-center md:flex-row md:justify-between md:text-left">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                Contato e dúvidas
+              </p>
+              <p className="text-lg font-bold text-foreground">WhatsApp</p>
+              <p className="font-mono text-base text-muted-foreground">
+                (34) 99770-3179
+              </p>
+            </div>
+            <a
+              href={`https://wa.me/55${WHATSAPP_CONTATO}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button
+                variant="outline"
+                className="border-primary/40 text-primary hover:bg-primary/10"
+              >
+                <Phone className="mr-2 h-4 w-4" /> Falar no WhatsApp
+              </Button>
+            </a>
           </CardContent>
         </Card>
 
@@ -411,7 +460,7 @@ function RifaPage() {
                     id="telefone"
                     value={telefone}
                     onChange={(e) => setTelefone(maskPhone(e.target.value))}
-                    placeholder="(34) 99244-8864"
+                    placeholder="(34) 99999-9999"
                     className="pl-9"
                     inputMode="tel"
                     required
