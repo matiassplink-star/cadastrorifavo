@@ -26,13 +26,14 @@ import {
   listarParticipantes,
   type Participante,
 } from "@/server/rifa.functions";
+import premioAsset from "@/assets/premio-tupperware.jpg.asset.json";
 
 const TOTAL_NUMEROS = 200;
-const VALOR_POR_NUMERO = 10;
-const PREMIO = 150;
-const DATA_SORTEIO = "28/06/2026";
-const CHAVE_PIX = "34992448864";
-const NOME_PIX = "VICTOR DIAS";
+const VALOR_POR_NUMERO = 15;
+const DATA_SORTEIO = "10/07/2026";
+const CHAVE_PIX = "13578182621";
+const NOME_PIX = "LAINE RODRIGUES DE SOUSA";
+const WHATSAPP_CONTATO = "34997703179";
 
 export const Route = createFileRoute("/")({
   component: RifaPage,
