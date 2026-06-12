@@ -25,7 +25,7 @@ import {
   cadastrarParticipante,
   listarParticipantes,
   type Participante,
-} from "@/server/rifa.functions";
+} from "@/lib/rifa.functions";
 import premioAsset from "@/assets/premio-tupperware.jpg.asset.json";
 
 const TOTAL_NUMEROS = 200;
