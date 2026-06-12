@@ -460,7 +460,7 @@ function RifaPage() {
                     id="telefone"
                     value={telefone}
                     onChange={(e) => setTelefone(maskPhone(e.target.value))}
-                    placeholder="(34) 99244-8864"
+                    placeholder="(34) 99999-9999"
                     className="pl-9"
                     inputMode="tel"
                     required
