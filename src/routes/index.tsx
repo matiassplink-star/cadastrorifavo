@@ -43,13 +43,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Participe da Rifa Solidária da Maria Luci. R$ 10,00 por número, prêmio de R$ 150,00 via PIX. Sorteio em 28/06/2026.",
+          "Rifa Solidária da Maria Luci. R$ 15,00 por número, prêmio Kit Tupperware. Sorteio em 10/07/2026.",
       },
       { property: "og:title", content: "Rifa Solidária — Maria Luci" },
       {
         property: "og:description",
         content:
-          "Ajude Maria Luci no tratamento urgente de visão. R$ 10,00 por número.",
+          "Ajude Maria Luci no tratamento urgente de visão. R$ 15,00 por número — prêmio Kit Tupperware.",
       },
     ],
   }),
