@@ -281,6 +281,54 @@ function RifaPage() {
           </CardContent>
         </Card>
 
+        {/* Prêmio - Foto */}
+        <Card style={{ boxShadow: "var(--shadow-card)" }}>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Trophy className="h-5 w-5 text-primary" />
+              Prêmio: Kit Tupperware
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <img
+              src={premioAsset.url}
+              alt="Kit Tupperware - prêmio da Rifa Solidária da Maria Luci"
+              className="mx-auto w-full max-w-2xl rounded-lg border border-border"
+              loading="lazy"
+            />
+            <p className="mt-3 text-center text-sm text-muted-foreground">
+              Concorra a este lindo kit Tupperware! 💜
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* WhatsApp contato */}
+        <Card style={{ boxShadow: "var(--shadow-card)" }}>
+          <CardContent className="flex flex-col items-center gap-3 p-5 text-center md:flex-row md:justify-between md:text-left">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                Contato e dúvidas
+              </p>
+              <p className="text-lg font-bold text-foreground">WhatsApp</p>
+              <p className="font-mono text-base text-muted-foreground">
+                (34) 99770-3179
+              </p>
+            </div>
+            <a
+              href={`https://wa.me/55${WHATSAPP_CONTATO}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button
+                variant="outline"
+                className="border-primary/40 text-primary hover:bg-primary/10"
+              >
+                <Phone className="mr-2 h-4 w-4" /> Falar no WhatsApp
+              </Button>
+            </a>
+          </CardContent>
+        </Card>
+
         {/* Stats */}
         <div className="grid gap-4 md:grid-cols-3">
           <StatCard
